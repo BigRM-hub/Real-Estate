@@ -24,14 +24,14 @@ GO
 CREATE TABLE dbo.Town
 (
     TownId      INT             IDENTITY(1, 1) PRIMARY KEY,
-    TownName    NVARCHAR(100)   NOT NULL UNIQUE
+    TownName    VARCHAR(100)    NOT NULL UNIQUE
 );
 GO
 
 CREATE TABLE dbo.HouseType
 (
-    HouseTypeId TINYINT         IDENTITY(1, 1) PRIMARY KEY,
-    TypeName    NVARCHAR(50)    NOT NULL UNIQUE,
+    HouseTypeId INT             IDENTITY(1, 1) PRIMARY KEY,
+    TypeName    VARCHAR(50)     NOT NULL UNIQUE,
     CONSTRAINT CK_HouseType_AllowedValues CHECK (
         TypeName IN ('Bi-Level', 'Colonial', 'Ranch', 'Split-Level', 'Duplex', 'Townhouse', 'Vacant Land', 'Apartment')
     )
@@ -41,26 +41,26 @@ GO
 CREATE TABLE dbo.Listing
 (
     ListingId               INT             IDENTITY(1, 1) PRIMARY KEY,
-    StreetAddress           NVARCHAR(200)   NOT NULL UNIQUE,
+    StreetAddress           VARCHAR(200)    NOT NULL UNIQUE,
     HouseNumber             INT             NOT NULL,
     TownId                  INT             NOT NULL REFERENCES dbo.Town(TownId),
-    HouseTypeId             TINYINT         NOT NULL REFERENCES dbo.HouseType(HouseTypeId),
-    Bedrooms                TINYINT         NOT NULL CHECK (Bedrooms >= 0),
+    HouseTypeId             INT             NOT NULL REFERENCES dbo.HouseType(HouseTypeId),
+    Bedrooms                INT             NOT NULL CHECK (Bedrooms >= 0),
     Bathrooms               DECIMAL(4, 1)   NOT NULL CHECK (Bathrooms >= 0),
     HouseSquareFeet         DECIMAL(10, 1)  NOT NULL CHECK (HouseSquareFeet > 0),
     LotSquareFeet           DECIMAL(12, 1)  NOT NULL CHECK (LotSquareFeet > 0),
-    OwnerName               NVARCHAR(200)   NOT NULL,
-    OwnerContactName        NVARCHAR(200)   NULL,
-    ClientName              NVARCHAR(200)   NOT NULL,
-    RealtorName             NVARCHAR(200)   NOT NULL,
+    OwnerName               VARCHAR(200)    NOT NULL,
+    OwnerContactName        VARCHAR(200)    NULL,
+    ClientName              VARCHAR(200)    NOT NULL,
+    RealtorName             VARCHAR(200)    NOT NULL,
     OnMarketDate            DATE            NOT NULL,
     AskingPrice             DECIMAL(12, 2)  NOT NULL CHECK (AskingPrice BETWEEN 100000 AND 9900000),
     IsSold                  BIT             NOT NULL DEFAULT (0),
     SoldDate                DATE            NULL,
     SoldPrice               DECIMAL(12, 2)  NULL,
-    BuyerName               NVARCHAR(200)   NULL,
+    BuyerName               VARCHAR(200)    NULL,
     IsInContract            BIT             NOT NULL DEFAULT (0),
-    ContractBuyerName       NVARCHAR(200)   NULL,
+    ContractBuyerName       VARCHAR(200)    NULL,
     ContractPrice           DECIMAL(12, 2)  NULL,
     CONSTRAINT CK_Listing_SoldData CHECK (
         (IsSold = 0 AND SoldDate IS NULL AND SoldPrice IS NULL) OR
